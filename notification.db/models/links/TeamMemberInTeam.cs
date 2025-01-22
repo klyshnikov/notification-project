@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace models.links;
 
-public class GroupInTeam
+public class TeamMemberInTeam
 {
+    public string TeamMemberId { get; set; }
     public string TeamId { get; set; }
-    public string GroupId { get; set; }
 }

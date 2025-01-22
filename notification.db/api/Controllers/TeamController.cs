@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using models.entity;
+using models.links
+
 using repo;
 
 namespace notification.db.Controllers;
@@ -11,20 +14,33 @@ public class TeamController : ControllerBase
     private readonly AppDbContext dbContext;
 
     [HttpPost("/create-team")]
-    public Group CreateTeam(
-        [FromBody] long userId,
+    public Task<Team> CreateTeam(
+        [FromBody] string userId,
         [FromBody] string name)
     {
+        Team team = new Team { };
 
+        dbContext.Teams.Add(team);
+        dbContext.TeamMemberInTeam.Add(new TeamMemberInTeam { TeamMemberId = userId, TeamId = team.Id });
+
+        return Task.FromResult(team);
     }
 
     [HttpPost("/add-team-member")]
-    public TeamMember AddTeamMember(
+    public Task<TeamMember> AddTeamMember(
             [FromBody] string userId,
             [FromBody] string memberId,
             [FromBody] string name)
-    {
+    {   
+        FormattableString query = 
+            $"select tm.TeamId from TeamMemberInTeam as tm join Team as t on t.Id = tm.TeamId where tm.TeamMemberId = {userId} and t.Name = {name}";
 
+        TeamMember? teamMember = dbContext.TeamMembers.FirstOrDefault(tm => tm.Id == memberId);
+        string? teamId = dbContext.Database.SqlQuery<string>(query).FirstOrDefault();
+
+        dbContext.TeamMemberInTeam.Add(new TeamMemberInTeam { TeamMemberId = memberId, TeamId = teamId});
+
+        return Task.FromResult<TeamMember>(teamMember);
     }
 
     [HttpPost("/delete-team-member")]

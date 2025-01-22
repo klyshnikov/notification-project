@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using models.entity;
+using models.links;
 
 namespace repo;
 
@@ -9,6 +10,9 @@ public class AppDbContext : DbContext
     public DbSet<Team> Teams { get; set; }
     public DbSet<TeamMember> TeamMembers { get; set; }
     public DbSet<WorkItem> WorkItems { get; set; }
+    public DbSet<GroupInTeam> GroupInTeam { get; set; }
+    public DbSet<TeamMemberInTeam> TeamMemberInTeam { get; set; }
+    public DbSet<TeamMemberInGroup> TeamMemberInGroup { get; set; }
 
     public AppDbContext()
     {
