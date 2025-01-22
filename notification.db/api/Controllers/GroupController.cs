@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-
-using models;
 using repo;
+using models.entity;
 
 namespace notification.db.Controllers;
 
@@ -10,13 +9,38 @@ namespace notification.db.Controllers;
 public class GroupController : ControllerBase
 {
     private readonly AppDbContext dbContext;
-    
-    [HttpPost("/add-group")]
-    public Group AddGroup(
-        [FromBody] string name,
+
+    [HttpPost("/create-group")]
+    public Group CreateGroup(
         [FromBody] long userId,
-        [FromBody] List<TeamMember> members)
+        [FromBody] string name)
     {
+
+    }
+
+    [HttpPost("/add-group-member")]
+    public TeamMember AddGroupeMember(
+            [FromBody] string userId,
+            [FromBody] string memberId,
+            [FromBody] string name)
+    { 
+        
+    }
+
+    [HttpPost("/delete-group-member")]
+    public TeamMember DeleteGroupMember(
+            [FromBody] string userId,
+            [FromBody] string memberId,
+            [FromBody] string name)
+    { 
+        
+    }
+
+    [HttpDelete("/delete-group")]
+    public Group DeleteGroup(
+            [FromBody] string userId,
+            [FromBody] string name)
+    { 
         
     }
 }
