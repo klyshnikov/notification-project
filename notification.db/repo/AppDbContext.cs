@@ -18,9 +18,15 @@ public class AppDbContext : DbContext
     {
         Database.EnsureCreated();
     }
-    
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<GroupInTeam>().HasKey(r => new { r.TeamId, r.GroupId});
+        modelBuilder.Entity<TeamMemberInTeam>().HasKey(r => new { r.TeamId, r.TeamMemberId });
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres");
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5434;Database=postgres;Username=postgres;Password=postgres");
     }
 }

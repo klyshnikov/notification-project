@@ -8,4 +8,6 @@ public class Team
     [Key, Column(Order = 0)]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public string Id { get; set; }
+
+    public string Name { get; set; }
 }

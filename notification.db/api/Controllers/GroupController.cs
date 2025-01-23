@@ -12,35 +12,35 @@ public class GroupController : ControllerBase
 
     [HttpPost("/create-group")]
     public Group CreateGroup(
-        [FromBody] long userId,
-        [FromBody] string name)
+        [FromQuery] long userId,
+        [FromQuery] string name)
     {
-
+        return null;
     }
 
     [HttpPost("/add-group-member")]
     public TeamMember AddGroupeMember(
-            [FromBody] string userId,
-            [FromBody] string memberId,
-            [FromBody] string name)
-    { 
-        
+            [FromQuery] string userId,
+            [FromQuery] string memberId,
+            [FromQuery] string name)
+    {
+        return null;    
     }
 
     [HttpPost("/delete-group-member")]
     public TeamMember DeleteGroupMember(
-            [FromBody] string userId,
-            [FromBody] string memberId,
-            [FromBody] string name)
-    { 
-        
+            [FromQuery] string userId,
+            [FromQuery] string memberId,
+            [FromQuery] string name)
+    {
+        return null;
     }
 
     [HttpDelete("/delete-group")]
     public Group DeleteGroup(
-            [FromBody] string userId,
-            [FromBody] string name)
-    { 
-        
+            [FromQuery] string userId,
+            [FromQuery] string name)
+    {
+        return null;
     }
 }
