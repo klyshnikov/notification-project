@@ -23,7 +23,7 @@ public class TeamController : ControllerBase
         [FromQuery] string userId,
         [FromQuery] string name)
     {
-        Team team = new Team { };
+        Team team = new Team { Name = name};
 
         dbContext.Teams.Add(team);
         dbContext.TeamMemberInTeam.Add(new TeamMemberInTeam { TeamMemberId = userId, TeamId = team.Id });
@@ -40,7 +40,7 @@ public class TeamController : ControllerBase
             [FromQuery] string name)
     {   
         FormattableString query = 
-            $"select tm.TeamId from TeamMemberInTeam as tm join Team as t on t.Id = tm.TeamId where tm.TeamMemberId = {userId} and t.Name = {name}";
+            $"select tm.\"TeamId\" as \"Value\" from \"TeamMemberInTeam\" as tm join \"Teams\" as t on t.\"Id\" = tm.\"TeamId\" where tm.\"TeamMemberId\" = {userId} and t.\"Name\" = {name}";
 
         TeamMember? teamMember = dbContext.TeamMembers.FirstOrDefault(tm => tm.Id == memberId);
         string? teamId = dbContext.Database.SqlQuery<string>(query).FirstOrDefault();
@@ -59,7 +59,7 @@ public class TeamController : ControllerBase
             [FromQuery] string name)
     {
         FormattableString query =
-            $"select tm.TeamId from TeamMemberInTeam as tm join Team as t on t.Id = tm.TeamId where tm.TeamMemberId = {userId} and t.Name = {name}";
+            $"select tm.\"TeamId\" as \"Value\" from \"TeamMemberInTeam\" as tm join \"Teams\" as t on t.\"Id\" = tm.\"TeamId\" where tm.\"TeamMemberId\" = {userId} and t.\"Name\" = {name}";
 
         TeamMember? teamMember = dbContext.TeamMembers.FirstOrDefault(tm => tm.Id == memberId);
         string? teamId = dbContext.Database.SqlQuery<string>(query).FirstOrDefault();
@@ -77,7 +77,7 @@ public class TeamController : ControllerBase
             [FromQuery] string name)
     {
         FormattableString query =
-            $"select tm.TeamId from TeamMemberInTeam as tm join Team as t on t.Id = tm.TeamId where tm.TeamMemberId = {userId} and t.Name = {name}";
+            $"select tm.\"TeamId\" as \"Value\" from \"TeamMemberInTeam\" as tm join \"Teams\" as t on t.\"Id\" = tm.\"TeamId\" where tm.\"TeamMemberId\" = {userId} and t.\"Name\" = {name}";
 
         string? teamId = dbContext.Database.SqlQuery<string>(query).FirstOrDefault();
 
