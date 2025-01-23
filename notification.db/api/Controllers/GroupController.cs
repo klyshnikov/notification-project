@@ -10,6 +10,11 @@ public class GroupController : ControllerBase
 {
     private readonly AppDbContext dbContext;
 
+    public GroupController(AppDbContext dbContext)
+    {
+        this.dbContext = dbContext;
+    }
+
     [HttpPost("/create-group")]
     public Group CreateGroup(
         [FromQuery] long userId,
