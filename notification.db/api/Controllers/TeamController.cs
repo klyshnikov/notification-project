@@ -90,6 +90,20 @@ public class TeamController : ControllerBase
         return Task.FromResult(team);
     }
 
+    [HttpGet("/get-members")]
+    public List<TeamMember> GetMembers(
+            [FromQuery] string userId,
+            [FromQuery] string name
+        )
+    {
+        FormattableString query =
+            $"select m.\"Id\" from \"TeamMemberInTeam\" as tm join \"Teams\" as t on t.\"Id\" = tm.\"TeamId\" join \"TeamMembers\" as m on m.\"Id\" = tm.\"TeamMemberId\" where tm.\"TeamMemberId\" = {userId} and t.\"Name\" = {name}";
+
+        var members = dbContext.Database.SqlQuery<TeamMember>(query);
+
+        return members.ToList();
+    }
+
     [HttpGet("/get-groups")]
     public Group GetGroups(
             [FromQuery] string userId,

@@ -6,6 +6,5 @@ namespace models.entity;
 public class TeamMember
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public string Id { get; set; }
 }
