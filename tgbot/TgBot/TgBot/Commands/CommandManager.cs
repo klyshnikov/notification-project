@@ -18,7 +18,24 @@ internal class CommandManager
 
     private static Dictionary<CommandAvailabilityScope, List<BotCommand>> GetBotCommands()
     { 
-        
+        var result = new Dictionary<CommandAvailabilityScope, List<BotCommand>>();
+
+        foreach ((string commandName, (string, CommandAvailabilityScope, IBotCommand) commandData) in GetCommands())
+        {
+            switch (commandData.Item2)
+            {
+                case CommandAvailabilityScope.Chat:
+                case CommandAvailabilityScope.Private:
+                    AddBotCommand(commandData.Item2, commandName, commandData.Item1);
+                    break;
+                case CommandAvailabilityScope.Chat | CommandAvailabilityScope.Private:
+                    AddBotCommand(CommandAvailabilityScope.Chat, commandName, commandData.Item1);
+                    AddBotCommand(CommandAvailabilityScope.Private, commandName, commandData.Item1);
+                    break;
+            }
+        }
+
+        return result;
     }
 
     private static Dictionary<string, (string, CommandAvailabilityScope, IBotCommand)> GetCommands()
