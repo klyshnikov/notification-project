@@ -8,7 +8,7 @@ using System.Windows.Input;
 namespace TgBot.Commands;
 
 [BotCommand("help", "Информация о боте")]
-internal class HelpCommand : ICommand
+internal class HelpCommand : IBotCommand
 {
 
 }
