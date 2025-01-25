@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TgBot.Bot
+namespace TgBot.Bot;
+
+internal class TelegramBotClientWrapper
 {
-    internal class TelegramBotClientWrapper
-    {
-    }
+
 }

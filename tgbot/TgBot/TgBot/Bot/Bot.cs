@@ -28,8 +28,13 @@ internal class Bot
             switch (availabilityScope)
             { 
                 case CommandAvailabilityScope.Private:
-                    await _client.
+                    await RepeatAsync(_client.SetMyCommandsAsync(commands, BotCommandScope.AllChatAdministrators()));
             }
         }
+    }
+
+    private async Task RepeatAsync(Task task)
+    { 
+        
     }
 }
