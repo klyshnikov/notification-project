@@ -69,13 +69,11 @@ internal class Bot
 
     private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellation)
     {
-        // Only process Message updates
         if (update.Message is not { } message)
         {
             return;
         }
 
-        // Only process text messages
         if (message.Text is not { } messageText)
         {
             return;
