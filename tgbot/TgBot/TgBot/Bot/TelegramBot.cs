@@ -14,15 +14,15 @@ using Telegram.Bot.Polling;
 
 namespace TgBot.Bot;
 
-internal class Bot
+internal class TelegramBot
 {
     private readonly TelegramBotClient _client;
     private readonly HttpClient _httpClient;
 
-    internal Bot()
+    internal TelegramBot()
     { 
         _httpClient = new HttpClient();
-        _client = new TelegramBotClient("TOKEN", _httpClient);
+        _client = new TelegramBotClient("7984167384:AAHGdAKccnpC4u3xekohG5iOLA_voeCFzEI", _httpClient);
     }
 
     internal async Task Start()
@@ -32,10 +32,11 @@ internal class Bot
             switch (availabilityScope)
             { 
                 case CommandAvailabilityScope.Private:
-                    await RepeatAsync(_client.SetMyCommandsAsync(commands, BotCommandScope.AllPrivateChats()));
+                    _client.SetMyCommands(commands, BotCommandScope.AllPrivateChats());
                     break;
                 case CommandAvailabilityScope.Chat:
-                    await RepeatAsync(_client.SetMyCommandsAsync(commands, BotCommandScope.AllGroupChats()));
+                    _client.SetMyCommands(commands, BotCommandScope.AllGroupChats());
+                    Thread.Sleep(1000);
                     break;
             }
         }
@@ -78,6 +79,8 @@ internal class Bot
         {
             return;
         }
+
+        Console.WriteLine($"Received a '{messageText}' message in chat {message.Chat.Id}.");
     }
 
     private Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
