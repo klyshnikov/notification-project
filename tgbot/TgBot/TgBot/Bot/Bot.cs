@@ -30,9 +30,15 @@ internal class Bot
             switch (availabilityScope)
             { 
                 case CommandAvailabilityScope.Private:
-                    await RepeatAsync(_client.SetMyCommandsAsync(commands, BotCommandScope.AllChatAdministrators()));
+                    await RepeatAsync(_client.SetMyCommandsAsync(commands, BotCommandScope.AllPrivateChats()));
+                    break;
+                case CommandAvailabilityScope.Chat:
+                    await RepeatAsync(_client.SetMyCommandsAsync(commands, BotCommandScope.AllGroupChats()));
+                    break;
             }
         }
+
+
     }
 
     private async Task RepeatAsync(Task task)
@@ -44,8 +50,15 @@ internal class Bot
                 await task.ConfigureAwait(false);
             }
             catch (RequestException e)
-            { 
-                if (i == )
+            {
+                if (i == SettingsManager.MAX_REPEAT_COUNT_WHILE_USE_TG_API)
+                {
+                    throw;
+                }
+                else
+                { 
+                    await Task.Delay(SettingsManager.MAX_REPEAT_COUNT_WHILE_USE_TG_API).ConfigureAwait(false);
+                }
             }
         }
     }
