@@ -22,7 +22,7 @@ internal class TelegramBot
     internal TelegramBot()
     { 
         _httpClient = new HttpClient();
-        _client = new TelegramBotClient("7984167384:AAHGdAKccnpC4u3xekohG5iOLA_voeCFzEI", _httpClient);
+        _client = new TelegramBotClient(SettingsManager.TOCKEN, _httpClient);
     }
 
     internal async Task Start()
