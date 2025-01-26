@@ -80,6 +80,8 @@ internal class TelegramBot
             return;
         }
 
+        
+
         Console.WriteLine($"Received a '{messageText}' message in chat {message.Chat.Id}.");
     }
 
