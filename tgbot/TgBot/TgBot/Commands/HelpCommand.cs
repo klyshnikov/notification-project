@@ -16,6 +16,7 @@ internal class HelpCommand : IBotCommand
 {
     public async Task<BotResponse?> ExecuteAsync(Message message, BotOptions botOptions, CancellationToken cancellationTocken)
     {
+        Console.WriteLine("Command inside");
         return await Task.FromResult<BotResponse?>(new BotResponse("Hello")).ConfigureAwait(false);
     }
 }

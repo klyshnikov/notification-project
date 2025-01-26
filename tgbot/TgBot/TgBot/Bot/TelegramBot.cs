@@ -32,10 +32,10 @@ internal class TelegramBot
             switch (availabilityScope)
             { 
                 case CommandAvailabilityScope.Private:
-                    _client.SetMyCommands(commands, BotCommandScope.AllPrivateChats());
+                    await _client.SetMyCommands(commands, BotCommandScope.AllPrivateChats());
                     break;
                 case CommandAvailabilityScope.Chat:
-                    _client.SetMyCommands(commands, BotCommandScope.AllGroupChats());
+                    await _client.SetMyCommands(commands, BotCommandScope.AllGroupChats());
                     Thread.Sleep(1000);
                     break;
             }
