@@ -44,13 +44,16 @@ internal class CommandManager
 
     private static Dictionary<string, (string, CommandAvailabilityScope, IBotCommand)> GetCommands()
     {
-        return Assembly
+        Console.WriteLine("In GetCommand()");
+        var commands = Assembly
             .GetExecutingAssembly()
             .GetTypes()
             .Where(t => t.IsAssignableTo(typeof(IBotCommand)))
             .Select(t => (CommandType: t, BotCommand: t.GetCustomAttribute<BotCommandAttribute>()))
             .Where(ta => ta.BotCommand != null)
             .ToDictionary(ta => "/" + ta.BotCommand!.Command, ta => (ta.BotCommand!.Description, ta.BotCommand.AvailabilityScope, (IBotCommand)Activator.CreateInstance(ta.CommandType)!));
+        Console.WriteLine(commands);
+        return commands;
     }
 
     private static void AddBotCommand(CommandAvailabilityScope commandAvailabilityScope, string commad, string description, Dictionary<CommandAvailabilityScope, List<BotCommand>> commandsDictionary)

@@ -27,7 +27,7 @@ internal class TelegramBot
         _client = new TelegramBotClient(SettingsManager.TOCKEN, _httpClient);
     }
 
-    internal async Task Start()
+    internal async Task<string> Start()
     {
         foreach ((CommandAvailabilityScope availabilityScope, List<BotCommand> commands) in CommandManager.BotCommands)
         {
@@ -45,7 +45,8 @@ internal class TelegramBot
 
         _client.StartReceiving(HandleUpdateAsync, HandlePollingErrorAsync, new ReceiverOptions { AllowedUpdates = [UpdateType.Message, UpdateType.CallbackQuery] });
 
-        return;
+        Thread.Sleep(3000);
+        return "Succsesfully start!";
     }
 
     private async Task RepeatAsync(Task task)
