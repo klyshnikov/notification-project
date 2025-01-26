@@ -13,7 +13,8 @@ public static class Program
         Environment.CurrentDirectory = AppContext.BaseDirectory;
 
         var _bot = new TelegramBot();
-        Task.FromResult(_bot.Start());
+        var a = _bot.Start();
+        a.Wait();
         Console.ReadLine();
     }
 }
