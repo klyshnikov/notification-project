@@ -9,11 +9,15 @@ using TgBot.Commands.Interfaces;
 using System.Reflection;
 using System.Data;
 using TgBot.Commands.Attributes;
+using TgBot.Models;
+using Microsoft.Extensions.Logging;
 
 namespace TgBot.Commands;
 
 internal class CommandManager
 {
+    private static readonly char[] _commandDelimiters = { ' ', '\t' };
+
     internal static Dictionary<CommandAvailabilityScope, List<BotCommand>> BotCommands { get; } = GetBotCommands();
 
     private static Dictionary<CommandAvailabilityScope, List<BotCommand>> GetBotCommands()
@@ -61,5 +65,27 @@ internal class CommandManager
         {
             commandsDictionary[commandAvailabilityScope] = new List<BotCommand> { c };
         }
+    }
+
+    internal static async Task<BotResponse> TryFindCommandAndMaybeExecute(Message message, BotOptions botOptions, CancellationToken cancellationToken)
+    {
+        string commandText = message.Text;
+
+        int commandDelimiterIndex = commandText.IndexOfAny(_commandDelimiters);
+
+        if (commandDelimiterIndex >= 0)
+            commandText = commandText[..commandDelimiterIndex];
+
+        int botNameStartIndex = commandText.IndexOf('@');
+
+        if (botNameStartIndex >= 0)
+        {
+            commandText = commandText[..botNameStartIndex];
+        }
+
+        if (GetCommands().TryGetValue(commandText, out (string, CommandAvailabilityScope, IBotCommand) command))
+            return await command.Item3.ExecuteAsync(message, botOptions, cancellationToken).ConfigureAwait(false);
+
+        return null;
     }
 }

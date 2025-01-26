@@ -82,11 +82,11 @@ internal class TelegramBot
             return;
         }
 
-        BotResponse? result = await CommandManager.TryFindCommandAndMaybeExecute(message, new BotOptions(), new Logger(), cancellation).ConfigureAwait(false);
+        BotResponse? result = await CommandManager.TryFindCommandAndMaybeExecute(message, new BotOptions(), cancellation).ConfigureAwait(false);
 
         if (result is not null)
-        { 
-            await _client.SendTextMessageAsync(message.Chat.Id, , result)
+        {
+            await _client.SendTextMessageAsync(message.Chat.Id, result.TextMessages[0]).ConfigureAwait(false);
         }
 
         Console.WriteLine($"Received a '{messageText}' message in chat {message.Chat.Id}.");
