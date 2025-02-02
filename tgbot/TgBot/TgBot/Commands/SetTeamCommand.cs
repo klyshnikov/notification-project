@@ -18,18 +18,19 @@ internal class SetTeamCommand : IBotCommand
     public async Task<BotResponse?> ExecuteAsync(Message message, BotOptions botOptions, CancellationToken cancellationTocken)
     {
         string[] commandArgs = message.Text.Split(' ', 2);
-        string teamName = commandArgs[0];
+        string teamName = commandArgs[1];
         var userId = message.From;
-        Console.WriteLine("Command inside");
+        var chatInfo = message;
+        Console.WriteLine("inside command");
 
         using HttpClient httpClient = new HttpClient();
 
-        httpClient.DefaultRequestHeaders.Add("Team-Members", teamMembersIds);
+        //httpClient.DefaultRequestHeaders.Add("Team-Members", teamMembersIds);
 
-        httpClient.BaseAddress = new Uri(SettingsManager.SERVICE_ADDRESS);
+        //httpClient.BaseAddress = new Uri(SettingsManager.SERVICE_ADDRESS);
 
-        var res = httpClient.GetFromJsonAsync<>("/set-team");
+        //var res = httpClient.GetFromJsonAsync<>("/set-team");
 
-        return await Task.FromResult<BotResponse?>(new BotResponse("Для данной группы успешно создана команда")).ConfigureAwait(false);
+        return await Task.FromResult<BotResponse?>(new BotResponse($"Team name: {teamName}")).ConfigureAwait(false);
     }
 }
