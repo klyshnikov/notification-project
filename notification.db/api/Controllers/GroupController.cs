@@ -24,7 +24,7 @@ public class GroupController : ControllerBase
     }
 
     [HttpPost("/add-group-member")]
-    public TeamMember AddGroupeMember(
+    public User AddGroupeMember(
             [FromQuery] string userId,
             [FromQuery] string memberId,
             [FromQuery] string name)
@@ -33,7 +33,7 @@ public class GroupController : ControllerBase
     }
 
     [HttpPost("/delete-group-member")]
-    public TeamMember DeleteGroupMember(
+    public User DeleteGroupMember(
             [FromQuery] string userId,
             [FromQuery] string memberId,
             [FromQuery] string name)
