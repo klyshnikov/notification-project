@@ -1,19 +1,19 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace models.entity;
 
-[Table("teams")]
-public class Team
+[Table("roles")]
+public class Role
 {
     [Column("id", Order = 0)]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public string Id { get; set; }
-    
+
     [Column("name", Order = 1)]
     public string Name { get; set; }
-
-    [Column("chat_id", Order = 2)]
-    public string ChatId { get; set; }
 }
