@@ -1,3 +1,4 @@
+using MongoDB.Driver;
 using repo;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>();
+using (var context = new AppDbContext())
+{
+    context.Database.EnsureCreated(); // Создаст БД и таблицы, если их нет
+}
+
+builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient("mongodb://localhost:27017"));
+builder.Services.AddScoped<IMongoDatabase>(sp =>
+{
+    var client = sp.GetRequiredService<IMongoClient>();
+    return client.GetDatabase("mongo");
+});
 
 var app = builder.Build();
 
