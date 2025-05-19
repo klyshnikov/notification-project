@@ -8,12 +8,9 @@ using System.Threading.Tasks;
 
 namespace models.links;
 
-[Table("group_in_team")]
-public class GroupInTeam
+[Table("user_in_group")]
+public class UserInGroup
 {
-    [Column("team_id", Order = 0)]
-    public string TeamId { get; set; }
-
-    [Column("group_id", Order = 1)]
-    public string GroupId { get; set; }
+    [Column("id", Order = 0)]
+    public string Id { get; set; }
 }
