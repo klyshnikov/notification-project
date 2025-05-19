@@ -12,7 +12,7 @@ internal static class SettingsManager
     internal static int MAX_REPEAT_COUNT_WHILE_USE_TG_API = 5;
     internal static int TIMEUOT_WHILE_REPEAT_USE_TG_API = 2000;
     internal static string TOCKEN_PATH = "../../../Settings/tocken";
-    internal static string SERVICE_ADDRESS = "";
+    internal static string SERVICE_ADDRESS = "http://localhost:5295"; // Check and make correct
 
     internal static string TOCKEN = GetTocken();
 

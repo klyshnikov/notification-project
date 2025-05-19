@@ -3,6 +3,7 @@ using System.Threading;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
 using TgBot.Bot;
+using TgBot.Consumer;
 
 namespace TgBot;
 
@@ -13,8 +14,12 @@ public static class Program
         Environment.CurrentDirectory = AppContext.BaseDirectory;
 
         var _bot = new TelegramBot();
-        var a = _bot.Start();
-        a.Wait();
+        var botTask = _bot.Start();
+
+        var _consumer = new ConsumerClient();
+        var consumerTask = _consumer.Start();
+
+        Task.WaitAll(botTask, consumerTask);
         Console.ReadLine();
     }
 }
