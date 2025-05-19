@@ -22,9 +22,10 @@ internal class TelegramBot
     private readonly HttpClient _httpClient;
 
     internal TelegramBot()
-    { 
+    {
         _httpClient = new HttpClient();
         _client = new TelegramBotClient(SettingsManager.TOCKEN, _httpClient);
+        BotHelper.SetClient(_client);
     }
 
     internal async Task<string> Start()

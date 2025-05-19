@@ -17,8 +17,8 @@ internal class BotHelper
         _client = client;
     }
 
-    public static async Task<ChatMember> GetChatMembers(ChatId chatId, long userId)
+    public static async Task<ChatMember[]> GetChatMembers(long chatId)
     {
-        return await _client.GetChatMember(chatId, userId);
+        return await _client.GetChatAdministrators(chatId);
     }
 }
