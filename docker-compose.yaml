@@ -26,3 +26,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+  tg_bot:
+    build:
+      ./tgbot/TgBot
+    container_name: tg_bot
+    depends_on:
+      db_api:
+        condition: service_healthy
