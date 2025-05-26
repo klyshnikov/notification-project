@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>();
 using (var context = new AppDbContext())
 {
-    context.Database.EnsureCreated(); // Создаст БД и таблицы, если их нет
+    context.Database.EnsureCreated();
 }
 
 builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient("mongodb://localhost:27017"));

@@ -45,13 +45,10 @@ public class WorkitemController : Controller
             { "Username", JsonSerializer.SerializeToElement(dbContext.Users.FirstOrDefault(u => request.AuthorId == u.Id).Username)}
         };
 
-        // Преобразуем Dictionary<string, JsonElement> в BsonDocument
         var bsonDocument = ConvertJsonElementToBsonDocument(document);
 
-        // Вставляем документ в коллекцию
         _collection.InsertOne(bsonDocument);
 
-        // Преобразуем BsonDocument в Dictionary<string, object> для возврата
         var responseDocument = ConvertBsonDocumentToDictionary(bsonDocument);
 
         return Ok();
@@ -60,32 +57,26 @@ public class WorkitemController : Controller
     [HttpGet("/get-wi")]
     public IActionResult GetWi([FromQuery] string wiId)
     {
-        // Проверяем, что параметр wiId передан
         if (string.IsNullOrEmpty(wiId))
         {
             return BadRequest("Параметр wiId обязателен.");
         }
 
-        // Преобразуем wiId в число (если WiId является числовым полем)
         if (!int.TryParse(wiId, out int wiIdInt))
         {
             return BadRequest("Параметр wiId должен быть числом.");
         }
 
-        // Создаем фильтр для поиска документов, где age > указанного значения
         var filter = Builders<BsonDocument>.Filter.Eq("WiId", wiIdInt);
 
-        // Выполняем запрос
         var documents = _collection.Find(filter).ToList();
 
-        // Преобразуем BsonDocument в Dictionary для удобства возврата в JSON
         var result = new List<Dictionary<string, object>>();
         foreach (var doc in documents)
         {
             result.Add(doc.ToDictionary());
         }
 
-        // Возвращаем результат в формате JSON
         return Ok(result.FirstOrDefault());
     }
     
@@ -95,48 +86,38 @@ public class WorkitemController : Controller
     {
         string teamId = dbContext.Teams.FirstOrDefault(t => t.ChatId == chatId).Id;
 
-        // Создаем фильтр для поиска документов, где age > указанного значения
         var filter = Builders<BsonDocument>.Filter.Eq("TeamId", teamId);
 
-        // Выполняем запрос
         var documents = _collection.Find(filter).ToList();
 
-        // Преобразуем BsonDocument в Dictionary для удобства возврата в JSON
         var result = new List<Dictionary<string, object>>();
         foreach (var doc in documents)
         {
             result.Add(doc.ToDictionary());
         }
 
-        // Возвращаем результат в формате JSON
         return Ok(result);
     }
 
     [HttpPost("/change-wi")]
     public IActionResult ChangeWi([FromQuery] string wiId, [FromQuery] string fieldName, [FromQuery] string fieldValue)
     {
-        // Проверяем, что все параметры переданы
         if (string.IsNullOrEmpty(wiId) || string.IsNullOrEmpty(fieldName) || string.IsNullOrEmpty(fieldValue))
         {
             return BadRequest("Все параметры (wiId, fieldName, fieldValue) обязательны.");
         }
 
-        // Преобразуем wiId в число (если WiId является числовым полем)
         if (!int.TryParse(wiId, out int wiIdInt))
         {
             return BadRequest("Параметр wiId должен быть числом.");
         }
 
-        // Создаем фильтр для поиска документа по полю WiId
         var filter = Builders<BsonDocument>.Filter.Eq("WiId", wiIdInt);
 
-        // Создаем update-запрос для установки значения поля
         var update = Builders<BsonDocument>.Update.Set(fieldName, fieldValue);
 
-        // Обновляем документ (если документ не найден, ничего не происходит)
         var updateResult = _collection.UpdateOne(filter, update);
 
-        // Проверяем, был ли обновлен документ
         if (updateResult.MatchedCount > 0)
         {
             return Ok(new { message = $"Поле '{fieldName}' у документа с WiId = {wiIdInt} успешно обновлено." });
@@ -150,25 +131,20 @@ public class WorkitemController : Controller
     [HttpDelete("/delete-wi")]
     public IActionResult DeleteWi([FromQuery] string wiId)
     {
-        // Проверяем, что параметр wiId передан
         if (string.IsNullOrEmpty(wiId))
         {
             return BadRequest("Параметр wiId обязателен.");
         }
 
-        // Преобразуем wiId в число (если WiId является числовым полем)
         if (!int.TryParse(wiId, out int wiIdInt))
         {
             return BadRequest("Параметр wiId должен быть числом.");
         }
 
-        // Создаем фильтр для поиска документа по полю WiId
         var filter = Builders<BsonDocument>.Filter.Eq("WiId", wiIdInt);
 
-        // Удаляем документ
         var deleteResult = _collection.DeleteOne(filter);
 
-        // Проверяем, был ли удален документ
         if (deleteResult.DeletedCount > 0)
         {
             return Ok(new { message = $"Документ с WiId = {wiIdInt} успешно удален." });
@@ -182,7 +158,6 @@ public class WorkitemController : Controller
     [HttpPut("/assign-to")]
     public IActionResult AssignTo([FromQuery] string wiId, [FromQuery] string username)
     {
-        // Проверяем, что параметр wiId передан
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(wiId))
         {
             return BadRequest("Параметры обязателены.");
@@ -193,7 +168,6 @@ public class WorkitemController : Controller
         var filter = Builders<BsonDocument>.Filter.Eq("WiId", int.Parse(wiId));
         var update = Builders<BsonDocument>.Update.Set("AssignTo", userId);
 
-        // Выполняем обновление
         var result = _collection.UpdateOne(filter, update);
 
         if (result.MatchedCount == 0)
@@ -225,7 +199,6 @@ public class WorkitemController : Controller
     {
         var filter = Builders<BsonDocument>.Filter.Eq("WiId", int.Parse(wiId));
 
-        // Создаем операцию обновления для удаления поля
         var update = Builders<BsonDocument>.Update.Unset("AssignTo");
 
         var result = _collection.UpdateOne(filter, update);
@@ -237,54 +210,6 @@ public class WorkitemController : Controller
 
         return Ok();
     }
-
-    //// GET: api/users/olderthan?age=20
-    //[HttpGet("/olderthan")]
-    //public IActionResult GetUsersOlderThan(int age)
-    //{
-    //    // Создаем фильтр для поиска документов, где age > указанного значения
-    //    var filter = Builders<BsonDocument>.Filter.Gt("age", age);
-
-    //    // Выполняем запрос
-    //    var documents = _collection.Find(filter).ToList();
-
-    //    // Преобразуем BsonDocument в Dictionary для удобства возврата в JSON
-    //    var result = new List<Dictionary<string, object>>();
-    //    foreach (var doc in documents)
-    //    {
-    //        result.Add(doc.ToDictionary());
-    //    }
-
-    //    // Возвращаем результат в формате JSON
-    //    return Ok(result);
-    //}
-
-    //// POST: api/users
-    //[HttpPost("/add-document")]
-    //public IActionResult AddDocument([FromBody] Dictionary<string, JsonElement> document)
-    //{
-    //    // Проверяем, что данные были переданы
-    //    if (document == null)
-    //    {
-    //        return BadRequest("Данные не были переданы.");
-    //    }
-
-    //    // Преобразуем Dictionary<string, JsonElement> в BsonDocument
-    //    var bsonDocument = ConvertJsonElementToBsonDocument(document);
-
-    //    // Вставляем документ в коллекцию
-    //    _collection.InsertOne(bsonDocument);
-
-    //    // Преобразуем BsonDocument в Dictionary<string, object> для возврата
-    //    var responseDocument = ConvertBsonDocumentToDictionary(bsonDocument);
-
-    //    // Возвращаем успешный статус и добавленный документ
-    //    return Ok(new
-    //    {
-    //        message = "Документ успешно добавлен.",
-    //        document = responseDocument
-    //    });
-    //}
 
     private int GetNextId()
     {
@@ -301,7 +226,7 @@ public class WorkitemController : Controller
         var result = _collection.Aggregate<BsonDocument>(pipeline).FirstOrDefault();
         try
         {
-            var maxWiId = result?["maxWiId"].AsInt32; // или AsInt64, в зависимости от типа данных
+            var maxWiId = result?["maxWiId"].AsInt32;
             return maxWiId + 1 ?? 1;
         }
         catch (Exception ex)
@@ -310,7 +235,6 @@ public class WorkitemController : Controller
         }
     }
 
-    // Рекурсивный метод для преобразования JsonElement в BsonValue
     private BsonDocument ConvertJsonElementToBsonDocument(Dictionary<string, JsonElement> dictionary)
     {
         var bsonDocument = new BsonDocument();
@@ -323,7 +247,6 @@ public class WorkitemController : Controller
         return bsonDocument;
     }
 
-    // Метод для преобразования JsonElement в BsonValue
     private BsonValue ConvertJsonElementToBsonValue(JsonElement jsonElement)
     {
         switch (jsonElement.ValueKind)
@@ -370,7 +293,6 @@ public class WorkitemController : Controller
         }
     }
 
-    // Рекурсивный метод для преобразования BsonDocument в Dictionary<string, object>
     private Dictionary<string, object> ConvertBsonDocumentToDictionary(BsonDocument bsonDocument)
     {
         var dictionary = new Dictionary<string, object>();

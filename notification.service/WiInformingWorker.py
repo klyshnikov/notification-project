@@ -5,12 +5,10 @@ from kafka import KafkaProducer
 import psycopg2
 from pymongo import MongoClient
 
-# Подключение к MongoDB
 client = MongoClient('mongodb://localhost:27017/')
-db = client['mongo']  # Укажите имя вашей базы данных
-collection = db['workitems']  # Укажите имя вашей коллекции
+db = client['mongo']
+collection = db['workitems']
 
-# Подключение к кафке
 KAFKA_HOST = "localhost"
 KAFKA_TOPIC_NAME = "wi_informing"
 
@@ -74,8 +72,7 @@ while (True):
         for expired_time in expired_times:
             expired_time_minutes = int(expired_time)
             end_time_pred_range = [now + timedelta(minutes=expired_time_minutes) - timedelta(seconds=sec_period), now + timedelta(minutes=expired_time_minutes) + timedelta(seconds=sec_period)]
-    
-            # Make end_time timezone-aware
+
             if end_time.tzinfo is None:
                 end_time = end_time.replace(tzinfo=timezone.utc)
     

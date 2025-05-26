@@ -7,8 +7,8 @@ from pymongo import MongoClient
 
 # Подключение к MongoDB
 client = MongoClient('mongodb://localhost:27017/')
-db = client['mongo']  # Укажите имя вашей базы данных
-collection = db['workitems']  # Укажите имя вашей коллекции
+db = client['mongo']
+collection = db['workitems']
 
 # Подключение к кафке
 KAFKA_HOST = "localhost"
@@ -48,7 +48,6 @@ while (True):
     time.sleep(5)
     print('Try to get info from mongo')
 
-    # Находим, кому выслать напоминание
     user_ids = set()
     cursor.execute("select user_id from wi_assign_sub")
     record = cursor.fetchall()
@@ -56,7 +55,6 @@ while (True):
         user_ids.add(record_i[0])
     print(user_ids)
 
-    # Находим документы с полем AssignTo для нужных пользователей
     query = {"AssignTo": {"$exists": True}}
     items_with_assignee = collection.find(query)
 
@@ -80,5 +78,4 @@ while (True):
 
 
 
-# Закрываем соединение
 client.close()
